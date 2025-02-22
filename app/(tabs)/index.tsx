@@ -4,6 +4,7 @@ import { Camera } from 'expo-camera';
 import { Ionicons } from '@expo/vector-icons';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Disease, DiagnoseResult } from '@/types';
+import {router} from "expo-router";
 
 type RootStackParamList = {
     Home: undefined;
@@ -32,25 +33,17 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
     const [diagnoseResult, setDiagnoseResult] = useState<DiagnoseResult | null>(null);
 
     const handleCameraPress = async () => {
-        const { status } = await Camera.requestCameraPermissionsAsync();
-        if (status === 'granted') {
-            navigation.navigate('Camera');
-        } else {
-            alert('Permission de caméra nécessaire pour cette fonctionnalité');
-        }
+            router.push("/camera");  // Assurez-vous que cette route correspond à votre fichier camera.tsx
     };
 
     return (
         <SafeAreaView style={styles.container}>
             {/* Header */}
-            <View style={styles.header}>
-                <Text style={styles.title}>BotaniX</Text>
-                {isOffline && (
-                    <View style={styles.offlineAlert}>
-                        <Text style={styles.offlineText}>Mode hors ligne actif</Text>
-                    </View>
-                )}
-            </View>
+            {isOffline && (
+                <View style={styles.offlineAlert}>
+                    <Text style={styles.offlineText}>Mode hors ligne actif</Text>
+                </View>
+            )}
 
             {/* Main Content */}
             <View style={styles.content}>
@@ -63,49 +56,6 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
                 </TouchableOpacity>
             </View>
 
-            {/* Navigation Bar */}
-            <View style={styles.navbar}>
-                <TouchableOpacity
-                    style={styles.navButton}
-                    onPress={() => setActiveTab('camera')}
-                >
-                    <Ionicons
-                        name="camera"
-                        size={24}
-                        color={activeTab === 'camera' ? '#2F9E44' : '#666'}
-                    />
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.navButton}
-                    onPress={() => setActiveTab('library')}
-                >
-                    <Ionicons
-                        name="book"
-                        size={24}
-                        color={activeTab === 'library' ? '#2F9E44' : '#666'}
-                    />
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.navButton}
-                    onPress={() => setActiveTab('alerts')}
-                >
-                    <Ionicons
-                        name="alert-circle"
-                        size={24}
-                        color={activeTab === 'alerts' ? '#2F9E44' : '#666'}
-                    />
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.navButton}
-                    onPress={() => setActiveTab('settings')}
-                >
-                    <Ionicons
-                        name="settings"
-                        size={24}
-                        color={activeTab === 'settings' ? '#2F9E44' : '#666'}
-                    />
-                </TouchableOpacity>
-            </View>
         </SafeAreaView>
     );
 };
